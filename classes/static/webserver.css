@@ -1,0 +1,56 @@
+* {
+  font-family: Verdana, Arial;
+  font-size: 12px;
+}
+
+#wrapper {
+	display: flex;
+}
+
+main {
+	flex: 1;
+	-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
+	border: 1px solid rgb(0%, 0%, 60%);
+	padding: 10px;
+	margin: 10px;
+}
+
+nav {
+  width: 200px;
+}
+
+nav ul {
+    border: 1px solid #555;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+	display: block;
+    list-style-type: none;
+    text-align: center;
+	padding-bottom: 5px;
+}
+
+nav ul li:last-child {
+    border-bottom: none;
+	padding-bottom: 0px;
+}
+
+animalButtons ul {
+	border: 1px solid #555;
+    margin: 0;
+    padding: 0;
+}
+
+animalButtons ul li {
+	display: block;
+    list-style-type: none;
+    text-align: center;
+	padding-bottom: 5px;
+}
+
+animalButtons ul li:last-child {
+    border-bottom: none;
+	padding-bottom: 0px;
+}
