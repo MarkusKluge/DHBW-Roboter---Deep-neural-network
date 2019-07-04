@@ -1,9 +1,8 @@
 from gpiozero import CPUTemperature
-import threading, time
+import threading, time, psutil
 
 class Diagnostics:
     def __init__(self):
-        print("Starting Diagnostics...")
         self.data = {
             'cpu_temp': 0,
             'cpu_usage': 0,
@@ -22,6 +21,8 @@ class Diagnostics:
     def runDiagnostic(self):
         while True:
             self.data['cpu_temp'] = CPUTemperature().temperature
+            self.data['cpu_usage'] = psutil.cpu_times()
+            self.data['ram_usage'] = psutil.virtual_memory()
             time.sleep(1)
 
     def getData(self):

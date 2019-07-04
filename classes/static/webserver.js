@@ -35,15 +35,16 @@ var webserver = {
     , handleButton : function() {
 		console.log("ButtonPressed");
         $.ajax({
-		  type: "POST",
+		  type: "GET",
 		  url: "/testDistance",
           success: function(result){
-            jQuery('#distance').text(result);
-            jQuery('#slider').val(result);
-            console.log(result);
+            // jQuery('#distance').text(result);
+            // jQuery('#slider').val(result);
+            jQuery("#pic").attr("src", 'data:image/jpeg;base64,'+result);
+            // console.log(result);
             setTimeout(function(){
                 webserver.handleButton();
-            }, 1000);
+            }, 250);
           }
 		});
     }
