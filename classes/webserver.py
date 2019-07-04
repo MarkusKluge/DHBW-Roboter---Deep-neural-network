@@ -1,12 +1,12 @@
 import threading, time
 
 class WebServer:
-    def __init__(self):
-        # self.name = name
+    def __init__(self,diagnostics):
         print("Starting WebServer...")
         from flask import Flask, render_template, request
         # from static.response import distance
         self.app = Flask(__name__)
+        self.diagnostics = diagnostics
 
         @self.app.route("/")
         def main():
@@ -19,8 +19,8 @@ class WebServer:
 
         @self.app.route('/testDistance', methods=['POST'])
         def run():
-            dist = distance()
-            return str(dist)
+            data = self.diagnostics.getData()
+            return str(data['cpu_temp'])
 
         self.runWebserverThread()
         print("WebServer is running...")

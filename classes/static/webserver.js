@@ -43,7 +43,7 @@ var webserver = {
             console.log(result);
             setTimeout(function(){
                 webserver.handleButton();
-            }, 50);
+            }, 1000);
           }
 		});
     }

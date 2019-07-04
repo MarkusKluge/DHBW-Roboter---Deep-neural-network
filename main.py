@@ -3,7 +3,7 @@ from classes.webserver import WebServer
 import time
 
 diagnostics = Diagnostics()
-webserver = WebServer()
+webserver = WebServer(diagnostics)
 
 print( diagnostics.getData() )
 time.sleep(1)
