@@ -27,3 +27,4 @@ class Diagnostics:
 
     def getData(self):
         return self.data
+    

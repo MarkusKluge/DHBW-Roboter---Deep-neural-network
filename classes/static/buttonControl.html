@@ -9,6 +9,11 @@
 			webserver.handleButton(ev.target.id);
 		});
 	});
+	jQuery(function(){
+		jQuery('#test2').click(function(ev){
+			webserver.handleButtonImageRaw(ev.target.id);
+		});
+	});
 </script>
 
 <div class="inhalt">
@@ -22,10 +27,17 @@
 </div>
 
 <button id="test" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Test_Distance</button>
+<button id="test2" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">ImageRaw</button>
 <p id="distance"></p>
-<!-- Slider with Starting Value -->
-<input id="slider" class="mdl-slider mdl-js-slider" type="range"
-	min="0" max="200" value="0" tabindex="0"
->
 
-<img id="pic" src="" alt="-" width="500" height="350">
+<div class="row">
+	<div class="column">
+		<img id="imageRaw" src="" alt="-" width="500" height="350">
+	</div>
+	<div class="column">
+		<img id="imageDNN" src="" alt="-" width="500" height="350">
+	</div>
+</div>
+<!-- Slider with Starting Value -->
+<input id="slider" class="mdl-slider mdl-js-slider" type="range" min="0" max="200" value="0" tabindex="0">
+

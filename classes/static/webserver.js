@@ -36,16 +36,31 @@ var webserver = {
 		console.log("ButtonPressed");
         $.ajax({
 		  type: "GET",
-		  url: "/testDistance",
+		  url: "/getDiagnostics",
           success: function(result){
             // jQuery('#distance').text(result);
             // jQuery('#slider').val(result);
-            jQuery("#pic").attr("src", 'data:image/jpeg;base64,'+result);
-            // console.log(result);
+            console.log(result);
             setTimeout(function(){
                 webserver.handleButton();
             }, 250);
           }
 		});
     }
+    , handleButtonImageRaw : function() {
+		console.log("getImageRaw");
+        $.ajax({
+		  type: "GET",
+		  url: "/getImageRaw",
+          success: function(result){
+            jQuery("#imageRaw").attr("src", 'data:image/jpeg;base64,'+result);
+            jQuery("#imageDNN").attr("src", 'data:image/jpeg;base64,'+result);
+            // console.log(result);
+            setTimeout(function(){
+                webserver.handleButtonImageRaw();
+            }, 250);
+          }
+		});
+    }
+
 }
