@@ -10,7 +10,7 @@ class LiveView:
 
         self.imageRaw = None
         self.imageJpeg = None
-        self.imageDNN = None
+        self.imageDnnJpeg = None
         self.dnnResults = None
         
         self.vs = cv2.VideoCapture(0)
@@ -27,7 +27,7 @@ class LiveView:
 
     def runLiveView(self):
         while True:
-            # for x in range(6):
+            # for x in range(1):
             for x in range(6):
                 (grabbed, frame) = self.vs.read()
 
@@ -45,10 +45,14 @@ class LiveView:
         self.imageJpeg = self.convertToJpeg(frame)
 
     def setImageDNN(self, frame, dnnResults):
-        self.imageDNN = frame
+        self.imageDnnJpeg = self.convertToJpeg(frame)
+        self.dnnResults = sorted(dnnResults.items(), key=lambda x: x[1], reverse=True)
 
     def getImageDNN(self):
-        return self.imageDNN
+        return self.imageDnnJpeg
+
+    def getDnn(self):
+        return self.imageDnnJpeg, self.dnnResults
 
     def convertToJpeg(self, frame):
         # Convert to jpeg for webview

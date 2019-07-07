@@ -1,3 +1,78 @@
-<div class="inhalt">
-    Willkommen bei der Roboterfernsteuerung des Teams Zoober!
+<script type="text/javascript">
+	jQuery(function(){
+		jQuery('#buttonRaw').click(function(ev){
+			webserver.handleButtonImageRaw(ev.target.id);
+		});
+		jQuery('#buttonDNN').click(function(ev){
+			webserver.handleButtonImageDNN(ev.target.id);
+		});
+		jQuery('#buttonDiagnostics').click(function(ev){
+			webserver.handleButtonDiagnostics(ev.target.id);
+		});
+	});
+</script>
+
+<button id="buttonRaw" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Image Raw</button>
+<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
+    <input type="checkbox" id="switch-1" class="mdl-switch__input" checked>
+    <span class="mdl-switch__label"></span>
+</label>
+<button id="buttonDNN" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">DNN</button>
+<button id="buttonDiagnostics" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Diagnostics</button>
+
+<!-- <p id="distance"></p>
+<input id="slider" class="mdl-slider mdl-js-slider" type="range" min="0" max="200" value="0" tabindex="0"> -->
+
+<div class="content-grid mdl-grid">
+    <div class="mdl-cell mdl-cell--1-col"></div>
+    <div class="mdl-cell mdl-cell--5-col">
+		<img id="imageRaw" src="" alt="" width="100%" >
+		<div class="align-right mdl-grid">
+            <div class="mdl-cell mdl-cell--1-col"></div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <span>CPU-Temp.</span>
+            </div>
+            <div class="align-right mdl-cell mdl-cell--2-col">
+                <span id="cpuTempValue"></span>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col"></div>
+        </div>
+		<div class="align-right mdl-grid">
+            <div class="mdl-cell mdl-cell--1-col"></div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <span>CPU-Speed</span>
+            </div>
+            <div class="align-right mdl-cell mdl-cell--2-col">
+                <span id="cpuClockValue"></span>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col"></div>
+        </div>
+		<div class="align-right mdl-grid">
+            <div class="mdl-cell mdl-cell--1-col"></div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <span>Total CPU-Usage</span>
+            </div>
+            <div class="align-right mdl-cell mdl-cell--2-col">
+                <span id="cpuUsageValue"></span>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col"></div>
+        </div>
+		<div class="align-right mdl-grid">
+            <div class="mdl-cell mdl-cell--1-col"></div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <span>Total RAM-Usage</span>
+            </div>
+            <div class="align-right mdl-cell mdl-cell--2-col">
+                <span id="ramUsageValue"></span>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col"></div>
+        </div>
+	</div>
+	<div class="mdl-cell mdl-cell--5-col">
+		<img id="imageDNN" src="" alt="" width="100%" >
+        <div id="dnnResults">
+            
+        </div>
+    </div>
+    <div class="mdl-cell mdl-cell--1-col"></div>
 </div>

@@ -21,8 +21,9 @@ class Diagnostics:
     def runDiagnostic(self):
         while True:
             self.data['cpu_temp'] = CPUTemperature().temperature
-            self.data['cpu_usage'] = psutil.cpu_times()
+            self.data['cpu_usage'] = psutil.cpu_percent(interval=None) # non blocking
             self.data['ram_usage'] = psutil.virtual_memory()
+            self.data['cpu_clock'] = psutil.cpu_freq()
             time.sleep(1)
 
     def getData(self):
