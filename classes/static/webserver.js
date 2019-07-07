@@ -7,16 +7,18 @@ var webserver = {
     $.ajaxSetup({
         cache: false
     });
-		jQuery('main').load('./static/main.html');
+    jQuery('main').load('./static/main.html', function() {
+      componentHandler.upgradeDom();
+    });
   }
   , 
   handleAnimalButton : function(animal) {
-  console.log(animal);
-      $.ajax({
-    type: "POST",
-    url: "/search_animal",
-    data: {animal: animal},
-  });
+      console.log(animal);
+        $.ajax({
+      type: "POST",
+      url: "/search_animal",
+      data: {animal: animal},
+    });
   }
   , handleButtonDiagnostics : function() {
   // console.log("getDiagnostics");
