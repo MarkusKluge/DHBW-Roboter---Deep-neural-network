@@ -1,33 +1,86 @@
 <script type="text/javascript">
 	jQuery(function(){
-		jQuery('#buttonRaw').click(function(ev){
-			webserver.handleButtonImageRaw(ev.target.id);
+        jQuery("button[id^='animal_']").click(function(event){
+            webserver.handleAnimalSelection(event);
+        });
+        jQuery('#btn-start').click(function(){
+            webserver.handleButtonStart(this);
+        });
+        jQuery('#btn-stop').click(function(){
+            webserver.handleButtonStop(this);
+        });
+        jQuery('#switch-diag').change(function(){
+            webserver.handleSwitchDiagnostics(this);
+        });
+		jQuery('#switch-live').change(function(){
+			webserver.handleSwitchLive(this);
 		});
-		jQuery('#buttonDNN').click(function(ev){
-			webserver.handleButtonImageDNN(ev.target.id);
-		});
-		jQuery('#buttonDiagnostics').click(function(ev){
-			webserver.handleButtonDiagnostics(ev.target.id);
+		jQuery('#switch-dnn').change(function(){
+			webserver.handleSwitchDNN(this);
 		});
 	});
 </script>
 
-<button id="buttonRaw" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Image Raw</button>
-<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
-    <input type="checkbox" id="switch-1" class="mdl-switch__input" checked>
-    <span class="mdl-switch__label"></span>
-</label>
-<button id="buttonDNN" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">DNN</button>
-<button id="buttonDiagnostics" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Diagnostics</button>
-
-<!-- <p id="distance"></p>
-<input id="slider" class="mdl-slider mdl-js-slider" type="range" min="0" max="200" value="0" tabindex="0"> -->
+<div class="content-grid mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--10-col">
+            <div class="btn-group ">
+                <button id="animal_leopard" class="animal mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    Leopard
+                </button>
+                <button id="animal_frog" class="animal mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    Frog
+                </button>
+                <button id="animal_dino" class="animal mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    Dino
+                </button>
+                <button id="animal_turtle" class="animal mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    Turtle
+                </button>
+                <button id="animal_tomato" class="animal mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    Tomato
+                </button>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--10-col">
+            <div>
+                <div>
+                    <button id="btn-start" class="btn-start mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Start</button>
+                    <button id="btn-stop" class="btn-stop mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Stop</button>
+                    <button id="btn-reset" class="btn-reset mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Reset</button>
+                </div>
+                <div id="timer">
+                    <span id="minute">00</span>:<span id="second">00</span>:<span id="milisecond">000</span>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+    </div>
+    
 
 <div class="content-grid mdl-grid">
     <div class="mdl-cell mdl-cell--1-col"></div>
     <div class="mdl-cell mdl-cell--5-col">
-		<img id="imageRaw" src="" alt="" width="100%" >
-		<div class="align-right mdl-grid">
+        <div class="content-grid mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-live">
+                    <input type="checkbox" id="switch-live" class="mdl-switch__input" checked>
+                    <span class="mdl-switch__label">Live-Cam</span>
+                </label>
+            </div>
+        </div>
+		<img id="imageRaw" class="img" src="" alt="" >
+        <div class="content-grid mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-diag">
+                    <input type="checkbox" id="switch-diag" class="mdl-switch__input" checked>
+                    <span class="mdl-switch__label">Diagnostics</span>
+                </label>
+            </div>
+        </div>
+        <div class="align-right mdl-grid">
             <div class="mdl-cell mdl-cell--1-col"></div>
             <div class="mdl-cell mdl-cell--4-col">
                 <span>CPU-Temp.</span>
@@ -69,10 +122,21 @@
         </div>
 	</div>
 	<div class="mdl-cell mdl-cell--5-col">
-		<img id="imageDNN" src="" alt="" width="100%" >
-        <div id="dnnResults">
-            
+        <div class="content-grid mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-dnn">
+                    <input type="checkbox" id="switch-dnn" class="mdl-switch__input" checked>
+                    <span class="mdl-switch__label">DNN-Image</span>
+                </label>
+            </div>
         </div>
+		<img id="imageDNN"  class="img" src="" alt="" >
+        <div class="content-grid mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <div id="dnnResults"></div>
+            </div>
+        </div>
+        
     </div>
     <div class="mdl-cell mdl-cell--1-col"></div>
 </div>

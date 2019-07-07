@@ -20,3 +20,77 @@ main {
 .align-right {
   text-align: right;
 }
+
+.btn-start {
+  background-color: green !important;
+  width: 150px;
+  font-size: 16px !important;
+  font-weight: bolder !important;
+}
+
+.btn-stop {
+  background-color: red !important;
+  font-size: 16px !important;
+  font-weight: bolder !important;
+}
+
+.btn-reset {
+  background-color: goldenrod !important;
+  font-size: 16px !important;
+  font-weight: bolder !important;
+}
+
+#timer, #minute, #second, #milisecond {
+  /* font: small-caps lighter 43px/150% "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; */
+  /* text-align:left; */
+  /* color: purple; */
+  padding: 5px;
+  font-size: 24px;
+}
+
+.img {
+  width: 100%;
+  /* max-width: 900px !important; */
+}
+
+.animal {
+  font-size: 14px !important;
+  font-weight: bolder !important;
+}
+.animal-selected {
+  background-color: rgba(112, 6, 233, 0.712) !important;
+}
+
+.dnn-results {
+  /* border-style: solid; */
+  height: 30px;
+}
+
+.dnn-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-animal {
+  font-size: 16px;
+}
+
+.progress-percent {
+  font-size: 16px;
+}
+
+.dnn-progress-background {
+  width: 100%;
+  background-color: lightgray;
+}
+
+.progress-green {
+  height: 30px;
+  background-color: green;
+}
+
+.progress-red {
+  height: 30px;
+  background-color: red;
+}

@@ -7,11 +7,7 @@ class RobotControl:
         self.dnn = dnn
 
         self.data = {
-            'cpu_temp': 0,
-            'cpu_usage': 0,
-            'ram_usage': 0,
-            'cpu_clock': '',
-            'status': None,
+            'animal': ""
         }
         
         self.runRobotControlThread()
@@ -27,7 +23,10 @@ class RobotControl:
             if image is not None:
                 frame, dnnResults = self.dnn.processImageWithDNN(image)
                 self.liveview.setImageDNN(frame, dnnResults)
+                # time.sleep(0.25)
                 time.sleep(0.5)
+                # time.sleep(1)
+                # time.sleep(2)
     # def getData(self):
     #     return self.data
     
