@@ -22,7 +22,7 @@ class WebServer:
                 print("Starting Diagnostics...")
                 self.diagnostics = Diagnostics()
                 print("Starting LiveView...")
-                self.liveview = LiveView(width=1280, height=720, fps=30)
+                self.liveview = LiveView(width=640, height=480, fps=30)
                 print("Starting DNN Processing...")
                 self.dnn = Dnn(self.liveview)
                 print("Starting RobotControl...")
@@ -43,6 +43,7 @@ class WebServer:
         @self.app.route('/getDiagnostics', methods=['GET'])
         def getDiagnostics():
             data = self.diagnostics.getData()
+            # print(self.robotcontrol.getDistance())
             return json.dumps(data)
 
         @self.app.route('/getImageRaw', methods=['GET'])

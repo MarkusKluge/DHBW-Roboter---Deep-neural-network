@@ -93,7 +93,7 @@ var webserver = {
               jQuery("#imageRaw").attr("src", 'data:image/jpeg;base64,'+result);
               setTimeout(function(){
                   webserver.runImageRaw();
-              }, 100);
+              }, 300);
             }
       });
     }
