@@ -7,12 +7,9 @@ jQuery(function () {
     }, 1000);
 });
 
-// var boolDiagnostics = true;
-// var boolLive = true;
-// var boolDNN = true;
-var boolDiagnostics = false;
-var boolLive = false;
-var boolDNN = false;
+var boolDiagnostics = true;
+var boolLive = true;
+var boolDNN = true;
 var timeStarted = null;
 var boolIsRunning = false;
 var selectedAnimal = '';
@@ -107,11 +104,26 @@ var webserver = {
         url: "/getDiagnostics",
             success: function(result){
               result = JSON.parse(result);
+
+              console.log(result);
+
               jQuery('#distance').text(result.distance.toFixed(1));
               jQuery('#cpuTempValue').text(result.cpu_temp.toFixed(1)+'°C');
               jQuery('#cpuUsageValue').text(result.cpu_usage.toFixed(1)+'%');
               jQuery('#ramUsageValue').text(result.ram_usage[2].toFixed(1)+'%');
               jQuery('#cpuClockValue').text( (result.cpu_clock[0]/1000).toFixed(1)+" GHz");
+              jQuery('#status').text(result.status);
+
+              if(result.finished == true){
+                boolIsRunning = false;
+              }
+
+              if(result.animal_found == true){
+                jQuery('#animalFound').text("Ja");
+              }else{
+                jQuery('#animalFound').text("");
+              }
+
               setTimeout(function(){
                   webserver.runDiagnostics();
               }, 500);
@@ -134,13 +146,13 @@ var webserver = {
               jQuery("#imageRaw").attr("src", 'data:image/jpeg;base64,'+result);
               setTimeout(function(){
                   webserver.runImageRaw();
-              }, 300);
+              }, 200);
             },
             error: function(){
               setTimeout(function()
               {
                   webserver.runImageRaw();
-              }, 250);
+              }, 500);
             }
       });
     }

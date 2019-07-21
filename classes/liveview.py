@@ -27,8 +27,9 @@ class LiveView:
 
     def runLiveView(self):
         while True:
+            # skip frames for lower input latency
             # for x in range(1):
-            for x in range(5):
+            for x in range(2):
                 (grabbed, frame) = self.vs.read()
 
             if grabbed:

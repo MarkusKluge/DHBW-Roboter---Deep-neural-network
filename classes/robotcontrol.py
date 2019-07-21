@@ -61,15 +61,23 @@ class RobotControl:
     def searchAnimalThread(self):
         # self.initSensors()
         self.heights = [55.0, 45.0, 33.0]
+        self.resetDiagnosticsData()
 
-        print("Search animal started ..... : "+self.animal)
+        status = ("Search animal started ..... : "+self.animal)
+        self.setDiagnosticsStatus(status)
+
         self.motorControlAllowed = True
 
         while self.heights:
             nextStop = self.heights.pop(0)
-            print("Move to next height: "+str(nextStop)+"cm.")
+            
+            status = "Move to next height: "+str(nextStop)+"cm."
+            self.setDiagnosticsStatus(status)
+
             while self.distance > nextStop and self.motorControlAllowed:
-                print("moveDown, cur height: "+str(self.distance)+" next stop: "+str(nextStop) )
+                status = "moveDown, cur height: "+str(self.distance)+" next stop: "+str(nextStop)
+                self.setDiagnosticsStatus(status)
+
                 self.moveDown(0.05)
             self.stop()
             
@@ -78,15 +86,27 @@ class RobotControl:
             print(self.animal+": "+str(self.dnnResults[self.animal]))
             
             if self.dnnResults[self.animal] >= 0.90:
-                print("Animal "+self.animal+" found with "+str(self.dnnResults[self.animal])+" accuracy.")
-                print("Animal found!")
-                break
+                status = "Animal "+self.animal+" found with "+str(self.dnnResults[self.animal])+" accuracy."
+                self.setDiagnosticsStatus(status)
                 
+                self.stop()
+                self.diagnostics.animalFound(True)
+                self.diagnostics.finished(True)
+                break
+
             time.sleep(2)
-
-
         else:
             print("No stops left.")
+            self.stop()
+
+    def setDiagnosticsStatus(self, text):
+        print(text)
+        self.diagnostics.setStatus(text)
+
+    def resetDiagnosticsData(self):
+        self.diagnostics.setStatus('')
+        self.diagnostics.animalFound(False)
+        self.diagnostics.finished(False)
 
     def moveDown(self, delaytime, powerInPercent=100):
         motor = self.motors[self.motorUpAndDown]
@@ -112,7 +132,8 @@ class RobotControl:
         for index in range(len(self.motors)):
             self.motors[index]["PWM"].ChangeDutyCycle(0)
         self.motorControlAllowed = False
-        print("Motors stopped. Height: "+str(self.distance))
+        status = "Motors stopped. Height: "+str(self.distance)
+        self.setDiagnosticsStatus(status)
         time.sleep(0.5)
         self.motorControlAllowed = True
 
@@ -127,17 +148,20 @@ class RobotControl:
             self.motors[index]["PWM"].ChangeDutyCycle(0)
 
         while self.distance < nextStop and self.motorControlAllowed:
-            print("moveUp, cur height: "+str(self.distance)+" next stop: "+str(nextStop) )
+            status = "moveUp, cur height: "+str(self.distance)+" next stop: "+str(nextStop)
+            self.setDiagnosticsStatus(status)
             self.moveUp(0.1)
-        print("Motor reseted. Height: "+str(self.distance))
+        status = "Motor reseted. Height: "+str(self.distance)
+        self.setDiagnosticsStatus(status)
         self.motorControlAllowed = True
-
-    def runDnnThread(self):
-        x = threading.Thread(target=self.processDNN)
-        x.start()
+        self.resetDiagnosticsData()
 
     def runDistanceThread(self):
         x = threading.Thread(target=self.setDistance)
+        x.start()
+
+    def runDnnThread(self):
+        x = threading.Thread(target=self.processDNN)
         x.start()
 
     def processDNN(self):

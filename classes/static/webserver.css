@@ -94,3 +94,8 @@ main {
   height: 30px;
   background-color: red;
 }
+
+.animal-found {
+  font-size: 16px;
+  color: green;
+}

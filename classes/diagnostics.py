@@ -9,7 +9,9 @@ class Diagnostics:
             'ram_usage': 0,
             'cpu_clock': '',
             'distance': 0,
-            'status': None,
+            'animal_found': False,
+            'finished': False,
+            'status': '',
         }
         
         self.runDiagnosticThread()
@@ -33,3 +35,11 @@ class Diagnostics:
     def setDistance(self, distance):
         self.data['distance'] = distance
     
+    def finished(self, finished):
+        self.data['finished'] = finished
+
+    def animalFound(self, found):
+        self.data['animal_found'] = found
+
+    def setStatus(self, status):
+        self.data['status'] = status
