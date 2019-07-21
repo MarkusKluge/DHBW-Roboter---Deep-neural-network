@@ -16,8 +16,12 @@ class Dnn:
 
         # Networks
         networks = {}
+        networks["64_v6"] = {"folder": "64_v6", "resolution": 64, "weights": "team5_62100.weights"}
+        # networks["64_v6"] = {"folder": "64_v6", "resolution": 64, "weights": "team5_last.weights"}
         networks["64_v4"] = {"folder": "64_v4", "resolution": 64, "weights": "yolov3-tiny_last.weights"}
-        selectedNetwork = networks["64_v4"]
+        
+        # selectedNetwork = networks["64_v4"]
+        selectedNetwork = networks["64_v6"]
 
         # Input
         myInput = frame

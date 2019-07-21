@@ -33,8 +33,8 @@ class LiveView:
 
             if grabbed:
                 height, width = frame.shape[:2]
-                frame = frame[int(height * 0.40):int(height * 0.80),
-                            int(width * 0.30):int(width * 0.70)]
+                frame = frame[int(height * 0.40):int(height * 0.75),
+                            int(width * 0.35):int(width * 0.65)]
                 self.setImage(frame)
     
     def getImageRaw(self):

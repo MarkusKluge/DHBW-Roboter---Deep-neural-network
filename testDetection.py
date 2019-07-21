@@ -60,12 +60,12 @@ selectedNetwork = networks["64_v6"]
 # Video Inputs
 
 # Raspi hell
-myInput = "../videos/original/2019-07-07_21_20_37_1080p30.mp4"
+# myInput = "../videos/original/2019-07-07_21_20_37_1080p30.mp4"
 # myInput = "../videos/cut_1.mkv"
 # myInput = "../videos/cut_2.mkv"
 # myInput = "../videos/cut_3.mkv"
 # myInput = "../videos/cut_2019-01-24_00_34_57_720p60.mkv"
-# myInput = "../videos/cut_2019-01-24_00_06_01_720p10.mkv"
+myInput = "../videos/cut_2019-01-24_00_06_01_720p10.mkv"
 # myInput = "../videos/cut_2019-01-20_20_10_45_720p60.mkv"
 
 # Raspi dunkel

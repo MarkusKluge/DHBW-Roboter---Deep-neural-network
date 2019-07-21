@@ -8,6 +8,7 @@ class Diagnostics:
             'cpu_usage': 0,
             'ram_usage': 0,
             'cpu_clock': '',
+            'distance': 0,
             'status': None,
         }
         
@@ -24,8 +25,11 @@ class Diagnostics:
             self.data['cpu_usage'] = psutil.cpu_percent(interval=None) # non blocking
             self.data['ram_usage'] = psutil.virtual_memory()
             self.data['cpu_clock'] = psutil.cpu_freq()
-            time.sleep(1)
+            time.sleep(0.5)
 
     def getData(self):
         return self.data
+
+    def setDistance(self, distance):
+        self.data['distance'] = distance
     

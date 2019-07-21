@@ -28,8 +28,6 @@ def run(delaytime, motorIndex, powerInPercent=100):
     GPIO.output(motor["IN_1"], GPIO.HIGH)
     GPIO.output(motor["IN_2"], GPIO.LOW)
     motor["PWM"].ChangeDutyCycle(powerInPercent)
-    # time.sleep(delaytime)
-    # motor["PWM"].ChangeDutyCycle(0)
 
 def back(delaytime, motorIndex, powerInPercent=100):
     print("Motor"+str(motorIndex)+" back")
@@ -37,8 +35,6 @@ def back(delaytime, motorIndex, powerInPercent=100):
     GPIO.output(motor["IN_1"], GPIO.LOW)
     GPIO.output(motor["IN_2"], GPIO.HIGH)
     motor["PWM"].ChangeDutyCycle(powerInPercent)
-    # time.sleep(delaytime)
-    # motor["PWM"].ChangeDutyCycle(0)
 
 def stop():
     for index in range(len(motors)):
@@ -62,11 +58,11 @@ def execute():
     print ("Do Something")
 
 def on_press(key):
-    delaytime = 0.01
-    # delaytime = 0.025
+    # delaytime = 0.01
+    delaytime = 0.025
     # delaytime = 0.5
     # delaytime = 1
-    # delaytime = 15
+    # delaytime = 30
 
     if any([key in COMBO for COMBO in COMBINATIONS]):
         print("on press: "+str(key))

@@ -1,15 +1,21 @@
 jQuery(function () {
     webserver.init();
-    webserver.runDiagnostics()
-    webserver.runImageRaw()
-    webserver.runImageDNN()
+    setTimeout(function(){
+      webserver.runDiagnostics()
+      webserver.runImageRaw()
+      webserver.runImageDNN()
+    }, 1000);
 });
 
-var boolDiagnostics = true;
-var boolLive = true;
-var boolDNN = true;
+// var boolDiagnostics = true;
+// var boolLive = true;
+// var boolDNN = true;
+var boolDiagnostics = false;
+var boolLive = false;
+var boolDNN = false;
 var timeStarted = null;
 var boolIsRunning = false;
+var selectedAnimal = '';
 
 var webserver = {
 	init : function() {
@@ -24,22 +30,51 @@ var webserver = {
     jQuery("button[id^='animal_']").removeClass("animal-selected");
     jQuery("#"+ev.currentTarget.id).addClass("animal-selected");
     jQuery("#btn-start").attr('disabled',false);
-    jQuery("#btn-reset").attr('disabled',false);
+    selectedAnimal = ev.currentTarget.id;
   }
   , handleButtonStart : function(ev) {
     jQuery("button[id^='animal_']").attr('disabled',true);
     jQuery("#btn-start").attr('disabled',true);
-    jQuery("#btn-stop").attr('disabled',false);
-    jQuery("#btn-reset").attr('disabled',true);
+    $.ajax({
+      type: "POST",
+      data: {animal: selectedAnimal},
+      url: "/searchAnimal",
+          success: function(result){
+            result = JSON.parse(result);
+          },
+          error: function(){
+            console.log("Error in handleButtonStart")
+          }
+    });
     boolIsRunning = true;
     initClock();
   }
   , handleButtonStop : function(ev) {
     jQuery("button[id^='animal_']").attr('disabled',false);
-    jQuery("#btn-start").attr('disabled',false);
-    jQuery("#btn-stop").attr('disabled',true);
-    jQuery("#btn-reset").attr('disabled',false);
     boolIsRunning = false;
+    $.ajax({
+      type: "GET",
+      url: "/stop",
+          success: function(result){
+            
+          },
+          error: function(){
+            console.log("Error in handleButtonStop")
+          }
+    });
+  }
+  , handleButtonReset : function(ev) {
+    boolIsRunning = false;
+    $.ajax({
+      type: "GET",
+      url: "/reset",
+          success: function(result){
+            
+          },
+          error: function(){
+            console.log("Error in handleButtonReset")
+          }
+    });
   }
   , handleSwitchDiagnostics : function(ev) {
     if(ev.checked) {
@@ -67,19 +102,25 @@ var webserver = {
   }
   , runDiagnostics : function() {
     if(boolDiagnostics === true){
-          $.ajax({
+      $.ajax({
         type: "GET",
         url: "/getDiagnostics",
             success: function(result){
               result = JSON.parse(result);
-              jQuery('#diagnostics').text(result);
+              jQuery('#distance').text(result.distance.toFixed(1));
               jQuery('#cpuTempValue').text(result.cpu_temp.toFixed(1)+'°C');
               jQuery('#cpuUsageValue').text(result.cpu_usage.toFixed(1)+'%');
               jQuery('#ramUsageValue').text(result.ram_usage[2].toFixed(1)+'%');
               jQuery('#cpuClockValue').text( (result.cpu_clock[0]/1000).toFixed(1)+" GHz");
               setTimeout(function(){
                   webserver.runDiagnostics();
-              }, 1000);
+              }, 500);
+            },
+            error: function(){
+              setTimeout(function()
+              {
+                  webserver.runDiagnostics();
+              }, 500);
             }
       });
     }
@@ -94,6 +135,12 @@ var webserver = {
               setTimeout(function(){
                   webserver.runImageRaw();
               }, 300);
+            },
+            error: function(){
+              setTimeout(function()
+              {
+                  webserver.runImageRaw();
+              }, 250);
             }
       });
     }
@@ -142,8 +189,20 @@ var webserver = {
                       result.forEach(function(value, index) {
                         jQuery('#percentage'+index).css('width',(value[1]*100).toFixed(1)+'%');
                       });
+                    },
+                    error: function(){
+                      setTimeout(function()
+                      {
+                          webserver.runImageDNN();
+                      }, 500);
                     }
               });
+              setTimeout(function()
+              {
+                  webserver.runImageDNN();
+              }, 250);
+            },
+            error: function(){
               setTimeout(function()
               {
                   webserver.runImageDNN();

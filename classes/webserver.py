@@ -22,7 +22,7 @@ class WebServer:
                 print("Starting Diagnostics...")
                 self.diagnostics = Diagnostics()
                 print("Starting LiveView...")
-                self.liveview = LiveView(width=640, height=480, fps=30)
+                self.liveview = LiveView(width=1280, height=1024, fps=30)
                 print("Starting DNN Processing...")
                 self.dnn = Dnn(self.liveview)
                 print("Starting RobotControl...")
@@ -35,15 +35,25 @@ class WebServer:
         def main():
             return render_template("index.html")
             
-        @self.app.route('/search_animal', methods=['POST'])
-        def search_animal():
-            print(request.form['animal'])
+        @self.app.route('/searchAnimal', methods=['POST'])
+        def searchAnimal():
+            animal = request.form['animal'][7:]
+            self.robotcontrol.searchAnimal(animal)
             return "", 204
+
+        @self.app.route('/stop', methods=['GET'])
+        def stop():
+            self.robotcontrol.stop()
+            return "", 200
+
+        @self.app.route('/reset', methods=['GET'])
+        def reset():
+            self.robotcontrol.reset()
+            return "", 200
 
         @self.app.route('/getDiagnostics', methods=['GET'])
         def getDiagnostics():
             data = self.diagnostics.getData()
-            # print(self.robotcontrol.getDistance())
             return json.dumps(data)
 
         @self.app.route('/getImageRaw', methods=['GET'])
@@ -73,7 +83,7 @@ class WebServer:
             if self.dnnResults is not None:
                 return json.dumps(self.dnnResults)
             else:
-                return "",404
+                return "",200
 
         self.runWebserver()
 

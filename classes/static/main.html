@@ -9,6 +9,9 @@
         jQuery('#btn-stop').click(function(){
             webserver.handleButtonStop(this);
         });
+        jQuery('#btn-reset').click(function(){
+            webserver.handleButtonReset(this);
+        });
         jQuery('#switch-diag').change(function(){
             webserver.handleSwitchDiagnostics(this);
         });
@@ -48,8 +51,8 @@
             <div>
                 <div>
                     <button id="btn-start" class="btn-start mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Start</button>
-                    <button id="btn-stop" class="btn-stop mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Stop</button>
-                    <button id="btn-reset" class="btn-reset mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Reset</button>
+                    <button id="btn-stop" class="btn-stop mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" >Stop</button>
+                    <button id="btn-reset" class="btn-reset mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" >Reset</button>
                 </div>
                 <div id="timer">
                     <span id="minute">00</span>:<span id="second">00</span>:<span id="milisecond">000</span>
@@ -66,7 +69,7 @@
         <div class="content-grid mdl-grid">
             <div class="mdl-cell mdl-cell--12-col">
                 <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-live">
-                    <input type="checkbox" id="switch-live" class="mdl-switch__input" checked>
+                    <input type="checkbox" id="switch-live" class="mdl-switch__input">
                     <span class="mdl-switch__label">Live-Cam</span>
                 </label>
             </div>
@@ -75,10 +78,20 @@
         <div class="content-grid mdl-grid">
             <div class="mdl-cell mdl-cell--12-col">
                 <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-diag">
-                    <input type="checkbox" id="switch-diag" class="mdl-switch__input" checked>
+                    <input type="checkbox" id="switch-diag" class="mdl-switch__input">
                     <span class="mdl-switch__label">Diagnostics</span>
                 </label>
             </div>
+        </div>
+        <div class="align-right mdl-grid">
+            <div class="mdl-cell mdl-cell--1-col"></div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <span>Height in cm</span>
+            </div>
+            <div class="align-right mdl-cell mdl-cell--2-col">
+                <span id="distance"></span>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col"></div>
         </div>
         <div class="align-right mdl-grid">
             <div class="mdl-cell mdl-cell--1-col"></div>
@@ -125,7 +138,7 @@
         <div class="content-grid mdl-grid">
             <div class="mdl-cell mdl-cell--12-col">
                 <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-dnn">
-                    <input type="checkbox" id="switch-dnn" class="mdl-switch__input" checked>
+                    <input type="checkbox" id="switch-dnn" class="mdl-switch__input">
                     <span class="mdl-switch__label">DNN-Image</span>
                 </label>
             </div>
