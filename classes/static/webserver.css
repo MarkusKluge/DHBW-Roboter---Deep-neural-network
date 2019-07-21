@@ -21,6 +21,11 @@ main {
   text-align: right;
 }
 
+.margin-left {
+  margin-left: 50px;
+  text-align: center;
+}
+
 .btn-start {
   background-color: green !important;
   width: 150px;

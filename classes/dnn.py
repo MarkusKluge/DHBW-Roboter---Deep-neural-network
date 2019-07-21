@@ -1,6 +1,7 @@
 import numpy as np
 import time, os
 import cv2, imutils
+import config as cfg
 
 class Dnn:
     def __init__(self, liveview):
@@ -14,14 +15,8 @@ class Dnn:
         myConfidence = 0.51
         myThreshold = 0.4
 
-        # Networks
-        networks = {}
-        networks["64_v6"] = {"folder": "64_v6", "resolution": 64, "weights": "team5_62100.weights"}
-        # networks["64_v6"] = {"folder": "64_v6", "resolution": 64, "weights": "team5_last.weights"}
-        networks["64_v4"] = {"folder": "64_v4", "resolution": 64, "weights": "yolov3-tiny_last.weights"}
-        
-        # selectedNetwork = networks["64_v4"]
-        selectedNetwork = networks["64_v6"]
+        networks = cfg.networks
+        selectedNetwork = cfg.selectedNetwork
 
         # Input
         myInput = frame

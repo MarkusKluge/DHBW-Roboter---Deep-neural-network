@@ -1,6 +1,7 @@
 import threading, time, psutil
 import RPi.GPIO as GPIO
 import statistics
+import config as cfg
 
 class RobotControl:
     def __init__(self, diagnostics=None, liveview=None, dnn=None):
@@ -11,22 +12,13 @@ class RobotControl:
         self.distance = -1
         self.animal = ''
 
-        self.heights = []
-
-        self.gpios = {
-            'DISTANCE_TRIGGER': 22,
-            'DISTANCE_ECHO': 27,
-        }
+        self.heights = cfg.heights.copy()
 
         self.motorInAndOut = 0
         self.motorUpAndDown = 1
         self.motorCatchAnimal = 2
 
-        self.motors = [
-            {"EN": 16, "IN_1": 20, "IN_2":21},
-            {"EN": 6, "IN_1": 13, "IN_2":26},
-            {"EN": 25, "IN_1": 23, "IN_2":24}
-        ]
+        self.motors = cfg.motors
 
         self.initSensors()
         self.runDnnThread()
@@ -40,8 +32,8 @@ class RobotControl:
         GPIO.setmode(GPIO.BCM)
 
         #Richtung der GPIO-Pins festlegen (IN / OUT)
-        GPIO.setup(self.gpios['DISTANCE_TRIGGER'], GPIO.OUT)
-        GPIO.setup(self.gpios['DISTANCE_ECHO'], GPIO.IN)
+        GPIO.setup(cfg.gpios['DISTANCE_TRIGGER'], GPIO.OUT)
+        GPIO.setup(cfg.gpios['DISTANCE_ECHO'], GPIO.IN)
 
         for index in range(len(self.motors)):
             print("Initialized Motor"+str(index))
@@ -59,8 +51,7 @@ class RobotControl:
             x.start()
 
     def searchAnimalThread(self):
-        # self.initSensors()
-        self.heights = [55.0, 45.0, 33.0]
+        self.heights = cfg.heights.copy()
         self.resetDiagnosticsData()
 
         status = ("Search animal started ..... : "+self.animal)
@@ -71,6 +62,9 @@ class RobotControl:
         while self.heights:
             nextStop = self.heights.pop(0)
             
+            if self.distance < nextStop and self.motorControlAllowed:
+                continue
+
             status = "Move to next height: "+str(nextStop)+"cm."
             self.setDiagnosticsStatus(status)
 
@@ -85,7 +79,7 @@ class RobotControl:
             print(self.dnnResults)
             print(self.animal+": "+str(self.dnnResults[self.animal]))
             
-            if self.dnnResults[self.animal] >= 0.90:
+            if self.dnnResults[self.animal] >= cfg.animalFoundAccuracy:
                 status = "Animal "+self.animal+" found with "+str(self.dnnResults[self.animal])+" accuracy."
                 self.setDiagnosticsStatus(status)
                 
@@ -98,6 +92,8 @@ class RobotControl:
         else:
             print("No stops left.")
             self.stop()
+            self.diagnostics.animalFound(False)
+            self.diagnostics.finished(True)
 
     def setDiagnosticsStatus(self, text):
         print(text)
@@ -142,7 +138,7 @@ class RobotControl:
         x.start()
 
     def resetThread(self):
-        nextStop = 60
+        nextStop = cfg.resetHeight
 
         for index in range(len(self.motors)):
             self.motors[index]["PWM"].ChangeDutyCycle(0)
@@ -171,24 +167,22 @@ class RobotControl:
                 frame, dnnResults = self.dnn.processImageWithDNN(image)
                 self.dnnResults = dnnResults
                 self.liveview.setImageDNN(frame, dnnResults)
-                time.sleep(0.1)
-                # time.sleep(0.25)
-                # time.sleep(0.5)
+                time.sleep(cfg.sleepProcessDnn)
     
     def getDistance(self):
         return self.distance
 
     def calcDistance(self):
         # Wartezeit, um sicher zu gehen, dass der Sensor bereit ist
-        GPIO.output(self.gpios['DISTANCE_TRIGGER'], False)
+        GPIO.output(cfg.gpios['DISTANCE_TRIGGER'], False)
         time.sleep(0.005)
 
         # setze Trigger auf HIGH
-        GPIO.output(self.gpios['DISTANCE_TRIGGER'], True)
+        GPIO.output(cfg.gpios['DISTANCE_TRIGGER'], True)
     
         # setze Trigger nach 0.01ms aus LOW
         time.sleep(0.00001)
-        GPIO.output(self.gpios['DISTANCE_TRIGGER'], False)
+        GPIO.output(cfg.gpios['DISTANCE_TRIGGER'], False)
         
         StartZeit = time.time()
         # Limitiere die max. Anzahl an while-Schleifendurchgänge, verhindert dass durch ein fehlendes Signal der Prozess sehr lange hängen bleibt
@@ -196,7 +190,7 @@ class RobotControl:
         counter2 = 0
 
         # speichere Startzeit
-        while GPIO.input(self.gpios['DISTANCE_ECHO']) == 0 and counter <= 1000:
+        while GPIO.input(cfg.gpios['DISTANCE_ECHO']) == 0 and counter <= 1000:
             counter += 1
             pass
         
@@ -205,7 +199,7 @@ class RobotControl:
         StartZeit = time.time()
         
         # speichere Ankunftszeit
-        while GPIO.input(self.gpios['DISTANCE_ECHO']) == 1 and counter2 <= 1000:
+        while GPIO.input(cfg.gpios['DISTANCE_ECHO']) == 1 and counter2 <= 1000:
             counter2 += 1
             pass
         StopZeit = time.time()

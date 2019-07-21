@@ -22,7 +22,7 @@ class WebServer:
                 print("Starting Diagnostics...")
                 self.diagnostics = Diagnostics()
                 print("Starting LiveView...")
-                self.liveview = LiveView(width=1280, height=1024, fps=30)
+                self.liveview = LiveView()
                 print("Starting DNN Processing...")
                 self.dnn = Dnn(self.liveview)
                 print("Starting RobotControl...")

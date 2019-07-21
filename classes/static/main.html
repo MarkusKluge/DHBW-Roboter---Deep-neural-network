@@ -20,7 +20,10 @@
 		});
 		jQuery('#switch-dnn').change(function(){
 			webserver.handleSwitchDNN(this);
-		});
+        });
+        jQuery('#btn-voice').click(function(){
+            startListening();
+        });
 	});
 </script>
 
@@ -43,6 +46,11 @@
                 <button id="animal_tomato" class="animal mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                     Tomato
                 </button>
+                <button class="material-icons margin-left" id="btn-voice">settings_voice</button>
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input class="mdl-textfield__input" type="text" id="input-voice">
+                    <label class="mdl-textfield__label" for="input-voice" id="input-voice-label"></label>
+                </div>
             </div>
         </div>
         <div class="mdl-cell mdl-cell--1-col"></div>

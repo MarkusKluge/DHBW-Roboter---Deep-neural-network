@@ -7,6 +7,9 @@ jQuery(function () {
     }, 1000);
 });
 
+// var boolDiagnostics = false;
+// var boolLive = false;
+// var boolDNN = false;
 var boolDiagnostics = true;
 var boolLive = true;
 var boolDNN = true;
@@ -22,14 +25,14 @@ var webserver = {
     jQuery('main').load('./static/main.html', function() {
       componentHandler.upgradeDom();
     });
-  }
-  , handleAnimalSelection : function(ev) {
+  }, 
+  handleAnimalSelection : function(ev) {
     jQuery("button[id^='animal_']").removeClass("animal-selected");
     jQuery("#"+ev.currentTarget.id).addClass("animal-selected");
     jQuery("#btn-start").attr('disabled',false);
     selectedAnimal = ev.currentTarget.id;
-  }
-  , handleButtonStart : function(ev) {
+  }, 
+  handleButtonStart : function(ev) {
     jQuery("button[id^='animal_']").attr('disabled',true);
     jQuery("#btn-start").attr('disabled',true);
     $.ajax({
@@ -44,9 +47,10 @@ var webserver = {
           }
     });
     boolIsRunning = true;
+    jQuery('#animalFound').text("...");
     initClock();
-  }
-  , handleButtonStop : function(ev) {
+  }, 
+  handleButtonStop : function(ev) {
     jQuery("button[id^='animal_']").attr('disabled',false);
     boolIsRunning = false;
     $.ajax({
@@ -59,8 +63,8 @@ var webserver = {
             console.log("Error in handleButtonStop")
           }
     });
-  }
-  , handleButtonReset : function(ev) {
+  }, 
+  handleButtonReset : function(ev) {
     boolIsRunning = false;
     $.ajax({
       type: "GET",
@@ -72,32 +76,32 @@ var webserver = {
             console.log("Error in handleButtonReset")
           }
     });
-  }
-  , handleSwitchDiagnostics : function(ev) {
+  }, 
+  handleSwitchDiagnostics : function(ev) {
     if(ev.checked) {
       boolDiagnostics = true
       webserver.runDiagnostics()
     } else {
       boolDiagnostics = false
     }
-  }
-  , handleSwitchLive : function(ev) {
+  }, 
+  handleSwitchLive : function(ev) {
     if(ev.checked) {
       boolLive = true
       webserver.runImageRaw()
     } else {
       boolLive = false
     }
-  }
-  , handleSwitchDNN : function(ev) {
+  }, 
+  handleSwitchDNN : function(ev) {
     if(ev.checked) {
       boolDNN = true
       webserver.runImageDNN()
     } else {
       boolDNN = false
     }
-  }
-  , runDiagnostics : function() {
+  }, 
+  runDiagnostics : function() {
     if(boolDiagnostics === true){
       $.ajax({
         type: "GET",
@@ -116,12 +120,13 @@ var webserver = {
 
               if(result.finished == true){
                 boolIsRunning = false;
+                jQuery("button[id^='animal_']").attr('disabled',false);
               }
 
               if(result.animal_found == true){
                 jQuery('#animalFound').text("Ja");
               }else{
-                jQuery('#animalFound').text("");
+                jQuery('#animalFound').text("Nein");
               }
 
               setTimeout(function(){
@@ -136,8 +141,8 @@ var webserver = {
             }
       });
     }
-  }
-  , runImageRaw : function() {
+  }, 
+  runImageRaw : function() {
     if(boolLive === true){
       $.ajax({
         type: "GET",
@@ -156,8 +161,8 @@ var webserver = {
             }
       });
     }
-  }
-  , runImageDNN : function() 
+  }, 
+  runImageDNN : function() 
   {
     if(boolDNN === true){
         $.ajax({

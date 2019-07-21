@@ -1,9 +1,10 @@
 import threading, time
 import numpy as np
 import cv2,base64,imutils
+import config as cfg
 
 class LiveView:
-    def __init__(self, width=1280, height=720, fps=30 ):
+    def __init__(self, width=cfg.width, height=cfg.height, fps=cfg.fps ):
         self.width = width
         self.height = height
         self.fps = fps
@@ -29,7 +30,7 @@ class LiveView:
         while True:
             # skip frames for lower input latency
             # for x in range(1):
-            for x in range(2):
+            for x in range(cfg.liveviewSkips):
                 (grabbed, frame) = self.vs.read()
 
             if grabbed:

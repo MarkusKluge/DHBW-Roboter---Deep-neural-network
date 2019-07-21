@@ -1,5 +1,6 @@
 from gpiozero import CPUTemperature
 import threading, time, psutil
+import config as cfg
 
 class Diagnostics:
     def __init__(self):
@@ -27,7 +28,7 @@ class Diagnostics:
             self.data['cpu_usage'] = psutil.cpu_percent(interval=None) # non blocking
             self.data['ram_usage'] = psutil.virtual_memory()
             self.data['cpu_clock'] = psutil.cpu_freq()
-            time.sleep(0.5)
+            time.sleep(cfg.sleepDiagnostic)
 
     def getData(self):
         return self.data
