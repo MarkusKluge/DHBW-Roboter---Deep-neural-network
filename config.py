@@ -1,12 +1,20 @@
 # RobotControl
-animalFoundAccuracy = 0.90
-resetHeight = 60
+animalFoundAccuracy = 0.45
+# resetHeight = 81.5
+resetHeight = 64
+# resetHeight = 40.0
+finishHeight = 11.5
 sleepProcessDnn = 0.1
 
+# heights = [
+#     28.8,
+#     13
+# ]
 heights = [
-    55.0, 
-    45.0, 
-    33.0
+    # 81.0,
+    56.9, 
+    36.0, 
+    11.5
 ]
 
 gpios = {

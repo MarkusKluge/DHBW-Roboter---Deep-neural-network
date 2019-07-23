@@ -39,11 +39,16 @@ class WebServer:
         def searchAnimal():
             animal = request.form['animal'][7:]
             self.robotcontrol.searchAnimal(animal)
-            return "", 204
+            return "", 200
 
         @self.app.route('/stop', methods=['GET'])
         def stop():
             self.robotcontrol.stop()
+            return "", 200
+
+        @self.app.route('/test', methods=['GET'])
+        def test():
+            self.robotcontrol.test()
             return "", 200
 
         @self.app.route('/reset', methods=['GET'])

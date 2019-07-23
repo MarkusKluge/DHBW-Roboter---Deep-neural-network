@@ -15,8 +15,10 @@ function randomPhrase() {
     return number;
 }
 
+
 function startListening() 
 {
+    var speechResult = '';
     var buttonVoice = jQuery('#btn-voice');
     var voiceText = jQuery('#input-voice-label');
 
@@ -33,20 +35,21 @@ function startListening()
     recognition.start();
 
     recognition.onresult = function(event) {
-    // The SpeechRecognitionEvent results property returns a SpeechRecognitionResultList object
-    // The SpeechRecognitionResultList object contains SpeechRecognitionResult objects.
-    // It has a getter so it can be accessed like an array
-    // The first [0] returns the SpeechRecognitionResult at position 0.
-    // Each SpeechRecognitionResult object contains SpeechRecognitionAlternative objects that contain individual results.
-    // These also have getters so they can be accessed like arrays.
-    // The second [0] returns the SpeechRecognitionAlternative at position 0.
-    // We then return the transcript property of the SpeechRecognitionAlternative object 
+        // The SpeechRecognitionEvent results property returns a SpeechRecognitionResultList object
+        // The SpeechRecognitionResultList object contains SpeechRecognitionResult objects.
+        // It has a getter so it can be accessed like an array
+        // The first [0] returns the SpeechRecognitionResult at position 0.
+        // Each SpeechRecognitionResult object contains SpeechRecognitionAlternative objects that contain individual results.
+        // These also have getters so they can be accessed like arrays.
+        // The second [0] returns the SpeechRecognitionAlternative at position 0.
+        // We then return the transcript property of the SpeechRecognitionAlternative object 
+        //console.log(event);
+        
+        speechResult = event.results[0][0].transcript;
+        var speechResultLower = event.results[0][0].transcript.toLowerCase();
 
-    var speechResult = event.results[0][0].transcript;
-    var speechResultLower = event.results[0][0].transcript.toLowerCase();
+        //console.log(event)
 
-    if(event.results[0].isFinal === true)
-    {
         // console.log('---------------------------------------------------');
         // console.log('Confidence: ' + event.results[0][0].confidence);
         // console.log(event.results[0]);
@@ -60,19 +63,17 @@ function startListening()
                     jQuery("button[id^='animal_"+animal+"']").addClass("animal-selected");
                     selectedAnimal = 'animal_'+animal;
                     jQuery("#btn-start").attr('disabled',false);
-                    webserver.handleButtonStart(this);
+                    recognition.abort();
+                    webserver.handleButtonStart();
+                    voiceText.text(speechResult);
                 }
             });
         }
-        
-        voiceText.text(speechResult);
-        recognition.stop();
-    }
     }
 
     recognition.onspeechend = function() {
-    recognition.stop();
-    console.log('onspeechend');
+        recognition.stop();
+        console.log('onspeechend');
     }
 
     recognition.onerror = function(event) {

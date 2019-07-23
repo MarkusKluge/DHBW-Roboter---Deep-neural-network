@@ -7,12 +7,12 @@ jQuery(function () {
     }, 1000);
 });
 
-// var boolDiagnostics = false;
-// var boolLive = false;
-// var boolDNN = false;
-var boolDiagnostics = true;
-var boolLive = true;
-var boolDNN = true;
+var boolDiagnostics = false;
+var boolLive = false;
+var boolDNN = false;
+// var boolDiagnostics = true;
+// var boolLive = true;
+// var boolDNN = true;
 var timeStarted = null;
 var boolIsRunning = false;
 var selectedAnimal = '';
@@ -40,7 +40,7 @@ var webserver = {
       data: {animal: selectedAnimal},
       url: "/searchAnimal",
           success: function(result){
-            result = JSON.parse(result);
+            console.log(result);
           },
           error: function(){
             console.log("Error in handleButtonStart")
@@ -49,6 +49,18 @@ var webserver = {
     boolIsRunning = true;
     jQuery('#animalFound').text("...");
     initClock();
+  }, 
+  handleButtonTest : function(ev) {
+    $.ajax({
+      type: "GET",
+      url: "/test",
+          success: function(result){
+            
+          },
+          error: function(){
+            console.log("Error in test")
+          }
+    });
   }, 
   handleButtonStop : function(ev) {
     jQuery("button[id^='animal_']").attr('disabled',false);
@@ -109,7 +121,7 @@ var webserver = {
             success: function(result){
               result = JSON.parse(result);
 
-              console.log(result);
+              // console.log(result);
 
               jQuery('#distance').text(result.distance.toFixed(1));
               jQuery('#cpuTempValue').text(result.cpu_temp.toFixed(1)+'°C');
@@ -131,7 +143,7 @@ var webserver = {
 
               setTimeout(function(){
                   webserver.runDiagnostics();
-              }, 500);
+              }, 1000);
             },
             error: function(){
               setTimeout(function()
@@ -157,7 +169,7 @@ var webserver = {
               setTimeout(function()
               {
                   webserver.runImageRaw();
-              }, 500);
+              }, 1000);
             }
       });
     }
@@ -223,7 +235,7 @@ var webserver = {
               setTimeout(function()
               {
                   webserver.runImageDNN();
-              }, 500);
+              }, 1000);
             }
         });
     }

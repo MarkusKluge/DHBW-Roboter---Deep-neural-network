@@ -21,7 +21,10 @@ class RobotControl:
         self.motors = cfg.motors
 
         self.initSensors()
-        self.runDnnThread()
+
+        # DNN Thread nur für Debugging
+        # self.runDnnThread()
+
         self.runDistanceThread()
         print("RobotControl started.")
 
@@ -50,6 +53,28 @@ class RobotControl:
             x = threading.Thread(target=self.searchAnimalThread)
             x.start()
 
+    def test(self):
+
+        self.moveIn(1.1)
+        time.sleep(0.2)
+
+        self.moveRopeIn(0.5)
+        time.sleep(0.2)
+        self.moveRopeIn(0.5)
+        time.sleep(0.2)
+        self.moveRopeIn(0.5)
+        time.sleep(0.2)
+        self.moveRopeIn(0.8)
+        time.sleep(0.2)
+
+        self.moveOut(0.5)
+        self.moveRopeIn(0.5)
+        time.sleep(0.2)
+        self.moveOut(0.5)
+        self.moveRopeOut(1.0, 80)
+        time.sleep(0.2)
+        self.moveOut(0.5)
+
     def searchAnimalThread(self):
         self.heights = cfg.heights.copy()
         self.resetDiagnosticsData()
@@ -58,6 +83,9 @@ class RobotControl:
         self.setDiagnosticsStatus(status)
 
         self.motorControlAllowed = True
+
+        print("Heights left:")
+        print(self.heights)
 
         while self.heights:
             nextStop = self.heights.pop(0)
@@ -74,7 +102,12 @@ class RobotControl:
 
                 self.moveDown(0.05)
             self.stop()
-            
+            while self.distance < nextStop and self.motorControlAllowed:
+                self.moveUp(0.01)
+
+            time.sleep(1)
+            self.processDNNonce()
+
             print("DNN results:")
             print(self.dnnResults)
             print(self.animal+": "+str(self.dnnResults[self.animal]))
@@ -82,13 +115,36 @@ class RobotControl:
             if self.dnnResults[self.animal] >= cfg.animalFoundAccuracy:
                 status = "Animal "+self.animal+" found with "+str(self.dnnResults[self.animal])+" accuracy."
                 self.setDiagnosticsStatus(status)
-                
-                self.stop()
                 self.diagnostics.animalFound(True)
                 self.diagnostics.finished(True)
+
+                self.moveIn(1.1)
+                time.sleep(0.2)
+
+                self.moveRopeIn(0.5)
+                time.sleep(0.2)
+                self.moveRopeIn(0.5)
+                time.sleep(0.2)
+                self.moveRopeIn(0.5)
+                time.sleep(0.2)
+                self.moveRopeIn(0.8)
+                time.sleep(0.2)
+
+                self.moveOut(0.5)
+                self.moveRopeIn(0.5)
+                time.sleep(0.2)
+                self.moveOut(0.5)
+                self.moveRopeOut(1.0, 80)
+                if self.animal != 'tomato':
+                    time.sleep(0.2)
+                    self.moveOut(0.5)
+                else:
+                    time.sleep(0.2)
+                    self.moveOut(0.5, 85)
+
                 break
 
-            time.sleep(2)
+            # time.sleep(2)
         else:
             print("No stops left.")
             self.stop()
@@ -105,20 +161,66 @@ class RobotControl:
         self.diagnostics.finished(False)
 
     def moveDown(self, delaytime, powerInPercent=100):
-        motor = self.motors[self.motorUpAndDown]
-        GPIO.output(motor["IN_1"], GPIO.HIGH)
-        GPIO.output(motor["IN_2"], GPIO.LOW)
-        motor["PWM"].ChangeDutyCycle(powerInPercent)
-        time.sleep(delaytime)
-        motor["PWM"].ChangeDutyCycle(0)
+        if self.motorControlAllowed == True:
+            motor = self.motors[self.motorUpAndDown]
+            GPIO.output(motor["IN_1"], GPIO.HIGH)
+            GPIO.output(motor["IN_2"], GPIO.LOW)
+            motor["PWM"].ChangeDutyCycle(powerInPercent)
+            time.sleep(delaytime)
+            motor["PWM"].ChangeDutyCycle(0)
 
     def moveUp(self, delaytime, powerInPercent=100):
-        motor = self.motors[self.motorUpAndDown]
-        GPIO.output(motor["IN_1"], GPIO.LOW)
-        GPIO.output(motor["IN_2"], GPIO.HIGH)
-        motor["PWM"].ChangeDutyCycle(powerInPercent)
-        time.sleep(delaytime)
-        motor["PWM"].ChangeDutyCycle(0)
+        if self.motorControlAllowed == True:
+            motor = self.motors[self.motorUpAndDown]
+            GPIO.output(motor["IN_1"], GPIO.LOW)
+            GPIO.output(motor["IN_2"], GPIO.HIGH)
+            motor["PWM"].ChangeDutyCycle(powerInPercent)
+            time.sleep(delaytime)
+            motor["PWM"].ChangeDutyCycle(0)
+
+    def moveIn(self, delaytime, powerInPercent=100):
+        if self.motorControlAllowed == True:
+            status = "moveIn"
+            self.setDiagnosticsStatus(status)
+            motor = self.motors[self.motorInAndOut]
+            GPIO.output(motor["IN_1"], GPIO.HIGH)
+            GPIO.output(motor["IN_2"], GPIO.LOW)
+            motor["PWM"].ChangeDutyCycle(powerInPercent)
+            time.sleep(delaytime)
+            motor["PWM"].ChangeDutyCycle(0)
+
+    def moveOut(self, delaytime, powerInPercent=100):
+        if self.motorControlAllowed == True:
+            status = "moveOut"
+            self.setDiagnosticsStatus(status)
+            motor = self.motors[self.motorInAndOut]
+            GPIO.output(motor["IN_1"], GPIO.LOW)
+            GPIO.output(motor["IN_2"], GPIO.HIGH)
+            motor["PWM"].ChangeDutyCycle(powerInPercent)
+            time.sleep(delaytime)
+            motor["PWM"].ChangeDutyCycle(0)
+
+    def moveRopeOut(self, delaytime, powerInPercent=100):
+        if self.motorControlAllowed == True:
+            status = "moveRopeOut"
+            self.setDiagnosticsStatus(status)
+            motor = self.motors[self.motorCatchAnimal]
+            GPIO.output(motor["IN_1"], GPIO.HIGH)
+            GPIO.output(motor["IN_2"], GPIO.LOW)
+            motor["PWM"].ChangeDutyCycle(powerInPercent)
+            time.sleep(delaytime)
+            motor["PWM"].ChangeDutyCycle(0)
+
+    def moveRopeIn(self, delaytime, powerInPercent=100):
+        if self.motorControlAllowed == True:
+            status = "moveRopeIn"
+            self.setDiagnosticsStatus(status)
+            motor = self.motors[self.motorCatchAnimal]
+            GPIO.output(motor["IN_1"], GPIO.LOW)
+            GPIO.output(motor["IN_2"], GPIO.HIGH)
+            motor["PWM"].ChangeDutyCycle(powerInPercent)
+            time.sleep(delaytime)
+            motor["PWM"].ChangeDutyCycle(0)
 
     def stop(self):
         x = threading.Thread(target=self.stopThread)
@@ -128,9 +230,10 @@ class RobotControl:
         for index in range(len(self.motors)):
             self.motors[index]["PWM"].ChangeDutyCycle(0)
         self.motorControlAllowed = False
+        
         status = "Motors stopped. Height: "+str(self.distance)
         self.setDiagnosticsStatus(status)
-        time.sleep(0.5)
+        time.sleep(1)
         self.motorControlAllowed = True
 
     def reset(self):
@@ -143,6 +246,7 @@ class RobotControl:
         for index in range(len(self.motors)):
             self.motors[index]["PWM"].ChangeDutyCycle(0)
 
+        self.moveOut(0.3)
         while self.distance < nextStop and self.motorControlAllowed:
             status = "moveUp, cur height: "+str(self.distance)+" next stop: "+str(nextStop)
             self.setDiagnosticsStatus(status)
@@ -168,7 +272,13 @@ class RobotControl:
                 self.dnnResults = dnnResults
                 self.liveview.setImageDNN(frame, dnnResults)
                 time.sleep(cfg.sleepProcessDnn)
-    
+    def processDNNonce(self):
+        image = self.liveview.getImageRaw()
+        if image is not None:
+            frame, dnnResults = self.dnn.processImageWithDNN(image)
+            self.dnnResults = dnnResults
+            self.liveview.setImageDNN(frame, dnnResults)
+
     def getDistance(self):
         return self.distance
 

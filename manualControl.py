@@ -51,7 +51,10 @@ COMBINATIONS = [
     {keyboard.Key.shift, keyboard.KeyCode(char='w')},
     {keyboard.Key.shift, keyboard.KeyCode(char='s')},
     {keyboard.Key.shift, keyboard.KeyCode(char='q')},
-    {keyboard.Key.shift, keyboard.KeyCode(char='e')}
+    {keyboard.Key.shift, keyboard.KeyCode(char='e')},
+    {keyboard.Key.shift, keyboard.KeyCode(char='r')},
+    {keyboard.Key.shift, keyboard.KeyCode(char='m')},
+    {keyboard.Key.shift, keyboard.KeyCode(char='t')}
 ]
 
 def execute():
@@ -65,7 +68,7 @@ def on_press(key):
     # delaytime = 30
 
     if any([key in COMBO for COMBO in COMBINATIONS]):
-        print("on press: "+str(key))
+        print(" on press: "+str(key))
         if key.char is "a":
             run(delaytime, 0)
         elif key.char is "d":
@@ -78,6 +81,16 @@ def on_press(key):
             run(delaytime, 2)
         elif key.char is "e":
             back(delaytime, 2)
+        elif key.char is "r":
+            run(delaytime, 2, 80)
+        elif key.char is "m":
+            for i in range(0, 10):
+                run(0, 0)
+                time.sleep(0.1)
+                stop()
+                time.sleep(0.05)
+        elif key.char is "t":
+            back(delaytime, 2, 80)
         elif key.char is "c":
             print("Cleanup")
             GPIO.cleanup()
