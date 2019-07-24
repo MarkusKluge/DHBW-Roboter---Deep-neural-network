@@ -23,7 +23,7 @@ class RobotControl:
         self.initSensors()
 
         # DNN Thread nur für Debugging
-        # self.runDnnThread()
+        self.runDnnThread()
 
         self.runDistanceThread()
         print("RobotControl started.")
@@ -71,9 +71,18 @@ class RobotControl:
         self.moveRopeIn(0.5)
         time.sleep(0.2)
         self.moveOut(0.5)
-        self.moveRopeOut(1.0, 80)
+
+        while self.distance > cfg.finishHeight and self.motorControlAllowed:
+            status = "moveDown, cur height: "+str(self.distance)+" next stop: "+str(cfg.finishHeight)
+            self.setDiagnosticsStatus(status)
+            self.moveDown(0.05)
+
+        self.moveRopeOut(1.0, 85)
+
         time.sleep(0.2)
-        self.moveOut(0.5)
+        self.moveOut(0.8)
+        self.moveRopeOut(0.5)
+        self.moveUp(3)
 
     def searchAnimalThread(self):
         self.heights = cfg.heights.copy()
@@ -121,7 +130,7 @@ class RobotControl:
                 self.moveIn(1.1)
                 time.sleep(0.2)
 
-                self.moveRopeIn(0.5)
+                self.moveRopeIn(0.6)
                 time.sleep(0.2)
                 self.moveRopeIn(0.5)
                 time.sleep(0.2)
@@ -134,14 +143,21 @@ class RobotControl:
                 self.moveRopeIn(0.5)
                 time.sleep(0.2)
                 self.moveOut(0.5)
-                self.moveRopeOut(1.0, 80)
-                if self.animal != 'tomato':
-                    time.sleep(0.2)
-                    self.moveOut(0.5)
-                else:
-                    time.sleep(0.2)
-                    self.moveOut(0.5, 85)
 
+                while self.distance > cfg.finishHeight and self.motorControlAllowed:
+                    status = "moveDown, cur height: "+str(self.distance)+" next stop: "+str(cfg.finishHeight)
+                    self.setDiagnosticsStatus(status)
+                    self.moveDown(0.05)
+
+                self.moveRopeOut(1.0, 95)
+
+                time.sleep(0.2)
+                self.moveOut(0.8)
+                self.moveRopeOut(0.5)
+                if self.motorControlAllowed:
+                    self.moveUp(3)
+                self.moveOut(0.8)
+                self.moveRopeOut(0.5)
                 break
 
             # time.sleep(2)
